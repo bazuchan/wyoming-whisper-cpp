@@ -75,6 +75,33 @@ docker run --rm -p 10300:10300 -v whisper-models:/data \
 selects `gpu`; a local pip installation still defaults to `cpu` because its
 pywhispercpp wheel may not support a GPU backend.
 
+## Published Vulkan image
+
+GitHub Actions builds the Vulkan image for **linux/amd64** and publishes it to
+`ghcr.io/bazuchan/wyoming-whisper-cpp` after the Python test matrix and image
+smoke checks succeed. The exact locally checked image is pushed, not rebuilt.
+
+- Push to the default branch: `:vulkan`, `:latest`, and `:vulkan-sha-<short-sha>`.
+- Version tag such as `v0.2.0`: `:0.2.0-vulkan` and `:vulkan-sha-<short-sha>`.
+- Pull requests and non-default branches: build/check only, no registry login or push.
+- Manual runs are available through **Actions > Test and Publish > Run workflow**;
+  publication uses the same default-branch/version-tag policy.
+
+After the first successful publication:
+
+```sh
+docker pull ghcr.io/bazuchan/wyoming-whisper-cpp:vulkan
+```
+
+Use that address as `image:` in your deployment Compose file instead of `build:`.
+Keep the existing render-device, group, model volume and environment settings.
+No Docker Hub secret is needed: the workflow uses `GITHUB_TOKEN` with
+`packages: write`. For anonymous pulls, set the resulting GHCR package visibility
+to **Public** in its package settings. Private packages require an authenticated
+pull. Existing packages must grant this repository Actions access. OCI labels
+link the image to its source repository. The workflow derives the registry path
+from the repository name, so forks publish to their own namespace.
+
 ## Configuration
 
 Every option also reads `WYO_WHISPER_<OPTION>` (dashes become underscores), or
