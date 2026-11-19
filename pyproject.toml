@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wyoming-whisper-cpp"
+version = "0.2.0"
+description = "Upstream-style Wyoming speech-to-text server using whisper.cpp"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE.md", "NOTICE.md"]
+dependencies = ["wyoming>=1.11,<2", "pywhispercpp>=1.5.1,<2", "numpy>=1.24,<3"]
+
+[project.optional-dependencies]
+hass = ["aiohttp>=3.10,<4"]
+vad = ["pysilero-vad>=2,<3"]
+dev = ["pytest>=8,<10", "pytest-asyncio>=0.24,<2", "ruff>=0.11", "build>=1", "aiohttp>=3.10,<4", "pysilero-vad>=2,<3"]
+
+[project.scripts]
+wyoming-whisper-cpp = "wyoming_whisper_cpp.__main__:run"
+
+[tool.setuptools.packages.find]
+include = ["wyoming_whisper_cpp*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = ["integration: real whisper.cpp inference (requires WHISPER_CPP_TEST_MODEL)"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.ruff]
+target-version = "py310"

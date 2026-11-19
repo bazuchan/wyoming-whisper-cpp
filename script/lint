@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")/.."
+"${VENV:-.venv}/bin/ruff" check .
+"${VENV:-.venv}/bin/ruff" format --check .

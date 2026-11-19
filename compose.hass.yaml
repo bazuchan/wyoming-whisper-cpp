@@ -1,0 +1,11 @@
+# Usage: docker compose -f compose.yaml -f compose.hass.yaml up --build -d
+services:
+  whisper:
+    environment:
+      WYO_WHISPER_HASS_API: "${HASS_API:-http://homeassistant.local:8123/api}"
+      WYO_WHISPER_HASS_TOKEN_FILE: /run/secrets/hass_token
+    secrets:
+      - hass_token
+secrets:
+  hass_token:
+    file: ./secrets/hass_token

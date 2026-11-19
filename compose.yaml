@@ -1,0 +1,22 @@
+services:
+  whisper:
+    build: .
+    devices:
+      - /dev/dri:/dev/dri
+    group_add:
+      - "${RENDER_GID:?Set RENDER_GID to the group ID of /dev/dri/renderD128}"
+    ports:
+      - "10300:10300"
+    volumes:
+      - models:/data
+    environment:
+      WYO_WHISPER_DEVICE: gpu
+      WYO_WHISPER_MODEL: base-q8_0
+      WYO_WHISPER_LANGUAGE: ru
+      WYO_WHISPER_VAD_FILTER: "true"
+      WYO_WHISPER_VAD_ENDPOINTING: "1.0"
+      WYO_WHISPER_STREAMING: "true"
+      WYO_WHISPER_STREAMING_INTERVAL: "1.0"
+    restart: unless-stopped
+volumes:
+  models:

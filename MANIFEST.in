@@ -1,0 +1,4 @@
+include LICENSE.md NOTICE.md README.md Dockerfile compose.yaml compose.hass.yaml
+recursive-include docs *.md
+recursive-include script *
+recursive-include tests *.py *.wav
